@@ -1,0 +1,50 @@
+const int pingPin = A1;
+const int echoPin = A0;
+int ledRed = 13;
+int speaker = 12;
+
+void setup ()
+{
+  Serial.begin(9600);
+  pinMode(ledRed, OUTPUT);
+  pinMode(speaker, OUTPUT);
+}
+
+void loop ()
+{
+  long duration,cm;
+  
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pingPin, LOW);
+
+  pinMode(echoPin, INPUT);
+  duration = pulseIn(echoPin, HIGH);
+  
+  cm = microsecondsToCentimeters(duration);
+
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+  delay(100);
+  
+  if (cm <=100)
+  {
+  digitalWrite(ledRed, HIGH);
+  tone(speaker, 100);
+  Serial.println("JAGA JARAK");
+  }
+  else 
+  {  
+  digitalWrite(ledRed, LOW);
+  tone(speaker, 0);
+  Serial.println("JARAK AMAN");
+  }
+}
+long microsecondsToCentimeters(long microseconds)
+{
+  return microseconds /29 /2;
+}
